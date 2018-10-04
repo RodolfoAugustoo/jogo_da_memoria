@@ -26,16 +26,33 @@ public abstract class Base {
     protected int altura = 100;
     protected Rectangle rect = new Rectangle(0, 0, 100, 100);
     protected ImageIcon img;
+    public String caminho;
+    public String fundo;
+    public String virou = "IMG/verso.png";
     
     
-    public Base(){
-    }
-    public Base(String url){
-       img     = new ImageIcon(this.getClass().getResource("/").getPath()+ url);
+    public Base(String url,String frente){
+        
+       img     = new ImageIcon(this.getClass().getResource("/"+ url));
        largura = img.getIconWidth();
        altura  = img.getIconHeight();      
        rect.height = altura;
        rect.width = largura;
+       this.caminho = frente;
+       this.fundo = url;
+    }
+    
+    public void alteraImg(){
+      img = new ImageIcon(this.getClass().getResource("/"+ caminho));
+
+    }
+    
+    public void esconde(){
+      img = new ImageIcon(this.getClass().getResource("/"+ fundo));
+    }
+    
+    public void imgEncontrado(){
+        img = new ImageIcon(this.getClass().getResource("/"+ virou));
     }
 
     public int getX() {
@@ -125,7 +142,7 @@ public abstract class Base {
     
     public void desenhar(Graphics g){       
         if(img != null){
-         g.drawImage(img.getImage(), x, y, null);
+         g.drawImage(img.getImage(), x, y, largura,altura,null);
         }
     }
 }

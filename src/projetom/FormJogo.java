@@ -12,38 +12,38 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static javafx.scene.input.KeyCode.I;
 
 /**
  *
  * @author RodolfoAugustodeOliv
  */
-public class FormJogo extends javax.swing.JFrame implements Runnable{
-    
-     Graphics graph;
-        Random rnd = new Random();
-        int r,g,b,j;
-        int qtd_cartas = 5;
-        int x = 20;
-        int y = 50;
-        
-        Carta carta;
-        
-        controlesCartas controle;
-        
-       // ArrayList<controlesCartas> listaControles = new ArrayList();
-        
-        ArrayList <Base> lista = new ArrayList();
+public class FormJogo extends javax.swing.JFrame implements Runnable {
 
+    Graphics graph;
+    Random rnd = new Random();
+    int j, i = 0;
+    int qtd_cartas = 6;
+    int jogadas = 0;
+    int qtd_jogadas = 2;
+    int x = 20;
+    int y = 50;
+    Point cursor = new Point();
+
+    Carta carta;
+
+    controlesCartas controle = new controlesCartas();
+
+    // ArrayList<controlesCartas> listaControles = new ArrayList();
+    // ArrayList <Base> lista = new ArrayList();
     /**
      * Creates new form FormJogo
      */
     public FormJogo() {
-       initComponents();
+        initComponents();
         createBufferStrategy(2);
         Thread t = new Thread(this);
         t.start();
-        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,6 +55,8 @@ public class FormJogo extends javax.swing.JFrame implements Runnable{
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(500, 500));
+        setResizable(false);
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
@@ -75,15 +77,28 @@ public class FormJogo extends javax.swing.JFrame implements Runnable{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    Point cursor = new Point();
+
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         cursor = evt.getPoint();
-        
-        if(controle.clique(cursor))
-            System.out.println("CLIQUE DO MOUSE");
-        else
-            System.out.println("FORA");         
+
+        if (controle.clique(cursor)) {
+            jogadas++;
+            controle.alteraEstado(Estados.SELECIONADO);
+
+            if (jogadas == qtd_jogadas) {
+                if (controle.getSelecionados().size() > 1) {
+                    if (controle.comparaCarta(controle.getSelecionados())) {
+                        controle.getSelecionados().removeAll(controle.getSelecionados());
+                    }
+                    else{
+                        controle.alteraEstado(Estados.INICIAL);
+                        controle.getSelecionados().removeAll(controle.getSelecionados());
+                    }
+                    jogadas = 0;
+                }
+                
+            }
+        }
     }//GEN-LAST:event_formMouseClicked
 
     /**
@@ -122,41 +137,36 @@ public class FormJogo extends javax.swing.JFrame implements Runnable{
     }
 
     @Override
-    public void run() {             
-       
-       for( int i = 0; i < (qtd_cartas*2) ; i++){        
-        
-         /*
-         CRIA CARTA E ASSOCIA
-         O CONTROLE DO PAR
-         */
-        carta = new Carta();
-        carta.setAltura(100);
-        carta.setLargura(100);
-        carta.setX(x);
-        carta.setY(y);
-        //lista.add(carta);
-        
-        if(x > 20 && x % 7 == 0 ){
-            x = 20;
-            y += 110;
+    public void run() {
+
+        for (int i = 0; i < (qtd_cartas * 2); i++) {
+            if (i % 2 == 0) {
+                j++;
+            }
+
+            carta = new Carta("IMG/" + j + ".png");
+            carta.setAltura(100);
+            carta.setLargura(100);
+            carta.setX(x);
+            carta.setY(y);
+            if (x > 20 && x % 7 == 0) {
+                x = 20;
+                y += 110;
+            } else {
+                x += 110;
+            }
+            controle.criaCartas(carta);              
         }
-        else
-            x+=110;
-        
-        controle.criaCartas(carta);
-       }
-       
-       
-        
-        while(true){
-            graph= getBufferStrategy().getDrawGraphics();
+
+        while (true) {
+            graph = getBufferStrategy().getDrawGraphics();
             graph.setColor(Color.white);
-            graph.fillRect(0,0,getWidth(), getHeight());
-            
-            for(Base base: lista)
-                base.desenhar(graph);                      
-            
+            graph.fillRect(0, 0, getWidth(), getHeight());
+
+            for (Base base : controle.getRegrasCartas()) {
+                base.desenhar(graph);
+            }
+
             graph.dispose();
             getBufferStrategy().show();
             try {
@@ -164,7 +174,7 @@ public class FormJogo extends javax.swing.JFrame implements Runnable{
             } catch (InterruptedException ex) {
                 Logger.getLogger(FormJogo.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }        
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

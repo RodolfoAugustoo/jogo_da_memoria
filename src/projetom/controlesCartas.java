@@ -5,12 +5,9 @@
  */
 package projetom;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
-
-import static projetom.Estados.ENCONTRADO;
-
+import java.util.Collections;
 /**
  *
  * @author RodolfoAugustodeOliv
@@ -18,9 +15,8 @@ import static projetom.Estados.ENCONTRADO;
 public class controlesCartas {
 
     private String nomeCarta;
-    private ArrayList<Carta> regrasCartas;
-
-    
+    private ArrayList<Carta> regrasCartas = new ArrayList();
+    private ArrayList<Carta> selecionados = new ArrayList();
 
     public String getNomeCarta() {
         return nomeCarta;
@@ -48,51 +44,13 @@ public class controlesCartas {
         this.regrasCartas.add(carta);
     }
 
-    /*
-    private void alteraVisualCartas(Carta carta) {
-        //PRECISO SABER A CARTA QUE ESTOU ALTERANDO
-        Estados estado = this.regrasCartas.get(carta);
+    public ArrayList<Carta> getSelecionados() {
+        return selecionados;
+    }
 
-        switch (estado) {
-            case INICIAL:
-                carta.setCor(Color.LIGHT_GRAY);
-                break;
-            case SELECIONADO:
-                carta.setCor(Color.YELLOW);
-                break;
-            case ENCONTRADO:
-                carta.setBorda(Color.PINK);
-                break;
-        }
-    }*/
-
-    /*
-    public void zerarCartas() {
-        alterarTodasCartas(Estados.INICIAL);
-    }*/
-
-    /*
-    public void alterarTodasCartas(Estados estado) {
-        //PERCORRE A LISTA DE CARTAS E ALTERA TODOS ESTADOS
-        // E O VISUAL
-        for (Carta carta : this.regrasCartas.keySet()) {
-            selecaoCarta(carta, estado);
-            alteraVisualCartas(carta);
-        }
-    }*/
-
-    /*
-    AÇÃO DOS ESTADOS DAS CARTAS
-     */
-    /*
-    public void executarAcaoCartas(Carta carta, Estados estado) {
-        selecaoCarta(carta, estado);
-        if (verificaTodasCartas()) {
-            alterarTodasCartas(ENCONTRADO);
-        } else {
-            alteraVisualCartas(carta);
-        }
-    }*/
+    public void setSelecionados(ArrayList<Carta> selecionados) {
+        this.selecionados = selecionados;
+    }
 
     public boolean verificaTodasCartas() {
         for (Carta c : this.regrasCartas) {
@@ -109,23 +67,48 @@ public class controlesCartas {
         return true;
     }
 
+    public void alteraEstado(Estados estado) {
+        for (Carta c : selecionados) {
+            c.setEstado(estado);
+            c.alteraImg();
+        }
+    }
+
     public boolean clique(Point cursor) {
         //Rectangle r = new Rectangle();
         System.out.println(regrasCartas.size());
+
         for (Carta carta : this.regrasCartas) {
             /*
                 VERIFICA SE O CLIQUE FOI DENTRO DA AREA DE ALGUMA CARTA
-             */
-            System.out.println(carta.x + " " + carta.largura + carta.x);
-            System.out.println(carta.y + " " + carta.altura + carta.y);
-            System.out.println(cursor.x);
-            System.out.println(cursor.y);
-
+             */            
             if (carta.rect.contains(cursor)) {
+                selecionados.add(carta);
                 return true;
             }
         }
         return false;
     }
+
+    public boolean comparaCarta(ArrayList<Carta> cartas) {
+
+        if (cartas.get(0).caminho.equals(cartas.get(1).caminho)) {
+
+            cartas.get(0).setEstado(Estados.ENCONTRADO);
+            cartas.get(0).imgEncontrado();
+            
+            cartas.get(1).setEstado(Estados.ENCONTRADO);
+            cartas.get(1).imgEncontrado();
+
+            return true;
+        } else {
+            
+            cartas.get(0).setEstado(Estados.INICIAL);
+            cartas.get(1).setEstado(Estados.INICIAL);
+            return false;
+        }
+    }
+    
+   
 
 }
