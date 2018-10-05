@@ -5,6 +5,10 @@
  */
 package projetom;
 
+<<<<<<< HEAD
+=======
+import java.awt.Color;
+>>>>>>> e70c4b8be32ddadf7608bb601255eff74622b068
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,7 +85,16 @@ public class controlesCartas {
         for (Carta carta : this.regrasCartas) {
             /*
                 VERIFICA SE O CLIQUE FOI DENTRO DA AREA DE ALGUMA CARTA
+<<<<<<< HEAD
              */            
+=======
+             */
+            System.out.println(carta.x + " " + carta.largura + carta.x);
+            System.out.println(carta.y + " " + carta.altura + carta.y);
+            System.out.println(cursor.x);
+            System.out.println(cursor.y);
+
+>>>>>>> e70c4b8be32ddadf7608bb601255eff74622b068
             if (carta.rect.contains(cursor)) {
                 selecionados.add(carta);
                 return true;
@@ -92,7 +105,11 @@ public class controlesCartas {
 
     public boolean comparaCarta(ArrayList<Carta> cartas) {
 
+<<<<<<< HEAD
         if (cartas.get(0).caminho.equals(cartas.get(1).caminho)) {
+=======
+        if (cartas.get(0).getImg() == cartas.get(1).getImg()) {
+>>>>>>> e70c4b8be32ddadf7608bb601255eff74622b068
 
             cartas.get(0).setEstado(Estados.ENCONTRADO);
             cartas.get(0).imgEncontrado();
@@ -107,8 +124,17 @@ public class controlesCartas {
             cartas.get(1).setEstado(Estados.INICIAL);
             return false;
         }
+<<<<<<< HEAD
     }
     
    
+=======
+
+    }
+    
+    public void Embaralha(){
+        Collections.shuffle(regrasCartas);
+    }
+>>>>>>> e70c4b8be32ddadf7608bb601255eff74622b068
 
 }

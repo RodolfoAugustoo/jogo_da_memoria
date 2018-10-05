@@ -22,7 +22,11 @@ public class FormJogo extends javax.swing.JFrame implements Runnable {
     Graphics graph;
     Random rnd = new Random();
     int j, i = 0;
+<<<<<<< HEAD
     int qtd_cartas = 6;
+=======
+    int qtd_cartas = 5;
+>>>>>>> e70c4b8be32ddadf7608bb601255eff74622b068
     int jogadas = 0;
     int qtd_jogadas = 2;
     int x = 20;
@@ -85,6 +89,7 @@ public class FormJogo extends javax.swing.JFrame implements Runnable {
             jogadas++;
             controle.alteraEstado(Estados.SELECIONADO);
 
+<<<<<<< HEAD
             if (jogadas == qtd_jogadas) {
                 if (controle.getSelecionados().size() > 1) {
                     if (controle.comparaCarta(controle.getSelecionados())) {
@@ -95,6 +100,17 @@ public class FormJogo extends javax.swing.JFrame implements Runnable {
                         controle.getSelecionados().removeAll(controle.getSelecionados());
                     }
                     jogadas = 0;
+=======
+            if (jogadas <= qtd_jogadas) {
+                if (controle.getSelecionados().size() > 1) {
+                    if (controle.comparaCarta(controle.getSelecionados())) {
+                        controle.getSelecionados().clear();
+                    }
+                    else{
+                        controle.alteraEstado(Estados.INICIAL);
+                        controle.getSelecionados().clear();
+                    }
+>>>>>>> e70c4b8be32ddadf7608bb601255eff74622b068
                 }
                 
             }
@@ -155,7 +171,13 @@ public class FormJogo extends javax.swing.JFrame implements Runnable {
             } else {
                 x += 110;
             }
+<<<<<<< HEAD
             controle.criaCartas(carta);              
+=======
+            controle.criaCartas(carta);
+            if(i == qtd_cartas-1 )
+                controle.Embaralha();
+>>>>>>> e70c4b8be32ddadf7608bb601255eff74622b068
         }
 
         while (true) {
